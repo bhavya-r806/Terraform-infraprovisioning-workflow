@@ -5,10 +5,14 @@ on:
     inputs:
       cloud:
         type: choice
-        options: [azure]
+        options: [azure, aws]
       environment:
         type: choice
-        options: [prod]
+        options: [dev, qa, prod]
+
+permissions:
+  id-token: write      # ✅ REQUIRED for OIDC
+  contents: read
 
 jobs:
   deploy:
