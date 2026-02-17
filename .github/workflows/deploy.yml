@@ -5,10 +5,10 @@ on:
     inputs:
       cloud:
         type: choice
-        options: [azure, aws]
+        options: [azure]
       environment:
         type: choice
-        options: [dev, qa, prod]
+        options: [prod]
 
 jobs:
   deploy:
