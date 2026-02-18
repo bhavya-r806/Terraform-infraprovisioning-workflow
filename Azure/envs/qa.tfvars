@@ -1,3 +1,5 @@
+environment = "qa"
+
 resource_group_name = "qa-resource-rg"
 location            = "East US"
 

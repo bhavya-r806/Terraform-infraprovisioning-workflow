@@ -1,3 +1,5 @@
+environment = "prod"
+
 resource_group_name = "prod-resource-rg"
 location            = "East US"
 

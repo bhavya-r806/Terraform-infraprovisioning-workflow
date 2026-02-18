@@ -1,3 +1,5 @@
+environment = "dev"
+
 resource_group_name = "dev-resource-rg"
 location            = "East US"
 
