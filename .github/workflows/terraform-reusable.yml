@@ -20,21 +20,15 @@ jobs:
     environment: ${{ inputs.environment }}
 
     steps:
-      # ----------------------------------------------------
-      # Checkout
-      # ----------------------------------------------------
+    
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # ----------------------------------------------------
-      # Setup Terraform
-      # ----------------------------------------------------
+    
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      # ----------------------------------------------------
-      # DEBUG: Verify secrets are visible to environment
-      # ----------------------------------------------------
+  
       - name: Debug Azure secrets visibility
         if: inputs.cloud == 'azure'
         run: |
@@ -45,9 +39,7 @@ jobs:
           echo "Repository: ${{ github.repository }}"
           echo "Ref: ${{ github.ref }}"
 
-      # ----------------------------------------------------
-      # Azure Login using OIDC
-      # ----------------------------------------------------
+     
       - name: Azure Login (OIDC)
         if: inputs.cloud == 'azure'
         uses: azure/login@v2
@@ -57,9 +49,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # ----------------------------------------------------
-      # Export ARM variables for Terraform
-      # ----------------------------------------------------
+  
       - name: Export Azure vars for Terraform
         if: inputs.cloud == 'azure'
         run: |
@@ -68,9 +58,7 @@ jobs:
           echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
           echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
 
-      # ----------------------------------------------------
-      # AWS Login using OIDC
-      # ----------------------------------------------------
+  
       - name: AWS Login (OIDC)
         if: inputs.cloud == 'aws'
         uses: aws-actions/configure-aws-credentials@v4
@@ -78,18 +66,24 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: us-east-1
 
-      # ----------------------------------------------------
-      # Terraform Init
-      # ----------------------------------------------------
+
       - name: Terraform Init
         run: terraform init
         working-directory: ${{ inputs.cloud == 'azure' && 'Azure' || 'AWS' }}
 
-      # ----------------------------------------------------
-      # Terraform Apply
-      # ----------------------------------------------------
-      - name: Terraform Apply
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: ${{ inputs.cloud == 'azure' && 'Azure' || 'AWS' }}
+
+     
+      - name: Terraform Plan
         run: |
-          terraform apply -auto-approve \
-            -var-file=envs/${{ inputs.environment }}.tfvars
+          terraform plan \
+            -var-file=envs/${{ inputs.environment }}.tfvars \
+            -out=tfplan
+        working-directory: ${{ inputs.cloud == 'azure' && 'Azure' || 'AWS' }}
+
+    
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
         working-directory: ${{ inputs.cloud == 'azure' && 'Azure' || 'AWS' }}
