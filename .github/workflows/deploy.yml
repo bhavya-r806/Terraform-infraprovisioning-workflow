@@ -5,18 +5,19 @@ on:
     inputs:
       cloud:
         type: choice
-        options: [azure, aws]
+        options: [azure]
       environment:
         type: choice
-        options: [dev, qa, prod]
+        options: [prod]
 
 permissions:
-  id-token: write      # ✅ REQUIRED for OIDC
+  id-token: write
   contents: read
 
 jobs:
   deploy:
     uses: ./.github/workflows/terraform-reusable.yml
+    secrets: inherit        # 🔴 THIS IS THE FIX
     with:
       cloud: ${{ inputs.cloud }}
       environment: ${{ inputs.environment }}
