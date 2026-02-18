@@ -20,15 +20,13 @@ jobs:
     environment: ${{ inputs.environment }}
 
     steps:
-    
+
       - name: Checkout code
         uses: actions/checkout@v4
 
-    
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-  
       - name: Debug Azure secrets visibility
         if: inputs.cloud == 'azure'
         run: |
@@ -39,17 +37,14 @@ jobs:
           echo "Repository: ${{ github.repository }}"
           echo "Ref: ${{ github.ref }}"
 
-     
       - name: Azure Login (OIDC)
         if: inputs.cloud == 'azure'
         uses: azure/login@v2
         with:
-          auth-type: OIDC
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-  
       - name: Export Azure vars for Terraform
         if: inputs.cloud == 'azure'
         run: |
@@ -58,14 +53,12 @@ jobs:
           echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
           echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
 
-  
       - name: AWS Login (OIDC)
         if: inputs.cloud == 'aws'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: us-east-1
-
 
       - name: Terraform Init
         run: terraform init
@@ -75,7 +68,6 @@ jobs:
         run: terraform validate
         working-directory: ${{ inputs.cloud == 'azure' && 'Azure' || 'AWS' }}
 
-     
       - name: Terraform Plan
         run: |
           terraform plan \
@@ -83,7 +75,6 @@ jobs:
             -out=tfplan
         working-directory: ${{ inputs.cloud == 'azure' && 'Azure' || 'AWS' }}
 
-    
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
         working-directory: ${{ inputs.cloud == 'azure' && 'Azure' || 'AWS' }}
