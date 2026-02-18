@@ -9,8 +9,8 @@ on:
     inputs:
       cloud:
         type: choice
-        options: [azure]
-        default: azure
+        options: [aws]
+        default: aws
       environment:
         type: choice
         options: [prod]
@@ -26,5 +26,5 @@ jobs:
     secrets: inherit
     with:
       # On push → fixed values
-      cloud: azure
+      cloud: aws
       environment: prod
