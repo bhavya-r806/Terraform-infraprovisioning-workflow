@@ -1,14 +1,20 @@
 name: Deploy Network
 
 on:
+  push:
+    branches:
+      - main
+
   workflow_dispatch:
     inputs:
       cloud:
         type: choice
         options: [azure]
+        default: azure
       environment:
         type: choice
         options: [prod]
+        default: prod
 
 permissions:
   id-token: write
@@ -17,7 +23,8 @@ permissions:
 jobs:
   deploy:
     uses: ./.github/workflows/terraform-reusable.yml
-    secrets: inherit        # 🔴 THIS IS THE FIX
+    secrets: inherit
     with:
-      cloud: ${{ inputs.cloud }}
-      environment: ${{ inputs.environment }}
+      # On push → fixed values
+      cloud: azure
+      environment: prod
