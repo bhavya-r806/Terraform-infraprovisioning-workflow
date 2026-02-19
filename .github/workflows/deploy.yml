@@ -18,8 +18,8 @@ on:
       action:
         description: "Terraform action"
         type: choice
-        options: [apply]
-        default: apply
+        options: [destroy]
+        default: destroy
 
 permissions:
   id-token: write
@@ -32,4 +32,4 @@ jobs:
     with:
       cloud: aws
       environment: dev
-      action: ${{ github.event.inputs.action || 'apply' }}
+      action: ${{ github.event.inputs.action || 'destroy' }}
