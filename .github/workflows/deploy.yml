@@ -19,7 +19,7 @@ on:
         description: "Terraform action"
         type: choice
         options: [destroy]
-        default: apply
+        default: destroy
 
 permissions:
   id-token: write

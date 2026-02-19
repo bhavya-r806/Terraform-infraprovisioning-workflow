@@ -9,6 +9,9 @@ on:
       environment:
         required: true
         type: string
+      action:
+        required: true
+        type: string   # apply | destroy
 
 permissions:
   id-token: write
@@ -20,23 +23,13 @@ jobs:
     environment: ${{ inputs.environment }}
 
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Debug Azure secrets visibility
-        if: inputs.cloud == 'azure'
-        run: |
-          echo "AZURE_CLIENT_ID present: ${{ secrets.AZURE_CLIENT_ID != '' }}"
-          echo "AZURE_TENANT_ID present: ${{ secrets.AZURE_TENANT_ID != '' }}"
-          echo "AZURE_SUBSCRIPTION_ID present: ${{ secrets.AZURE_SUBSCRIPTION_ID != '' }}"
-          echo "GitHub Environment: ${{ inputs.environment }}"
-          echo "Repository: ${{ github.repository }}"
-          echo "Ref: ${{ github.ref }}"
-
+      # ---------- CLOUD AUTH ----------
       - name: Azure Login (OIDC)
         if: inputs.cloud == 'azure'
         uses: azure/login@v2
@@ -60,6 +53,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: us-east-1
 
+      # ---------- TERRAFORM ----------
       - name: Terraform Init
         run: terraform init
         working-directory: ${{ inputs.cloud == 'azure' && 'Azure' || 'AWS' }}
@@ -69,6 +63,7 @@ jobs:
         working-directory: ${{ inputs.cloud == 'azure' && 'Azure' || 'AWS' }}
 
       - name: Terraform Plan
+        if: inputs.action == 'apply'
         run: |
           terraform plan \
             -var-file=envs/${{ inputs.environment }}.tfvars \
@@ -76,5 +71,11 @@ jobs:
         working-directory: ${{ inputs.cloud == 'azure' && 'Azure' || 'AWS' }}
 
       - name: Terraform Apply
+        if: inputs.action == 'apply'
         run: terraform apply -auto-approve tfplan
+        working-directory: ${{ inputs.cloud == 'azure' && 'Azure' || 'AWS' }}
+
+      - name: Terraform Destroy
+        if: inputs.action == 'destroy'
+        run: terraform destroy -auto-approve -var-file=envs/${{ inputs.environment }}.tfvars
         working-directory: ${{ inputs.cloud == 'azure' && 'Azure' || 'AWS' }}
