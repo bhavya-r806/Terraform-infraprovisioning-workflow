@@ -14,10 +14,6 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
-locals {
-  all_subnets = merge(var.public_subnets, var.private_subnets)
-}
-
 resource "aws_subnet" "subnets" {
   for_each = local.all_subnets
 
