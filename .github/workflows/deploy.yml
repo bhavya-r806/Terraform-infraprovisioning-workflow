@@ -13,13 +13,13 @@ on:
         default: aws
       environment:
         type: choice
-        options: [prod]
-        default: prod
+        options: [dev]
+        default: dev
       action:
         description: "Terraform action"
         type: choice
-        options: [destroy]
-        default: destroy
+        options: [apply]
+        default: apply
 
 permissions:
   id-token: write
@@ -31,5 +31,5 @@ jobs:
     secrets: inherit
     with:
       cloud: aws
-      environment: prod
+      environment: dev
       action: ${{ github.event.inputs.action || 'apply' }}
