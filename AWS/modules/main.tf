@@ -10,24 +10,32 @@ resource "aws_vpc" "network" {
   )
 }
 
-data "aws_availability_zones" "available" {}
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
+locals {
+  all_subnets = merge(var.public_subnets, var.private_subnets)
+}
 
 resource "aws_subnet" "subnets" {
   for_each = local.all_subnets
 
-  vpc_id     = aws_vpc.this.id
+  vpc_id     = aws_vpc.network.id
   cidr_block = each.value
 
-  availability_zone = data.aws_availability_zones.available.names[
-    index(keys(local.all_subnets), each.key)
+  # Stable AZ assignment
+  availability_zone = element(
+    data.aws_availability_zones.available.names,
+    index(sort(keys(local.all_subnets)), each.key)
     % length(data.aws_availability_zones.available.names)
-  ]
+  )
 
   tags = merge(
     var.tags,
     {
       Name = "${var.vpc_name}-${each.key}"
-      Tier = startswith(each.key, "public") ? "public" : "private"
+      Tier = contains(keys(var.public_subnets), each.key) ? "public" : "private"
     }
   )
 }

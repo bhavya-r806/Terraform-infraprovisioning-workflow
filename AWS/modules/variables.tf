@@ -1,3 +1,8 @@
+variable "region" {
+  description = "AWS region where resources will be created"
+  type        = string
+}
+
 variable "vpc_name" {
   description = "Name of the VPC"
   type        = string
@@ -8,22 +13,18 @@ variable "vpc_cidr" {
   type        = string
 }
 
-variable "public_subnet_count" {
-  description = "Number of public subnets"
-  type        = number
+variable "public_subnets" {
+  description = "Map of public subnet names to CIDR blocks"
+  type        = map(string)
 }
 
-variable "private_subnet_count" {
-  description = "Number of private subnets"
-  type        = number
-}
-
-variable "subnet_newbits" {
-  description = "Number of additional bits to split the VPC CIDR"
-  type        = number
+variable "private_subnets" {
+  description = "Map of private subnet names to CIDR blocks"
+  type        = map(string)
 }
 
 variable "tags" {
-  description = "Common tags for all resources"
+  description = "Common tags applied to all resources"
   type        = map(string)
+  default     = {}
 }
