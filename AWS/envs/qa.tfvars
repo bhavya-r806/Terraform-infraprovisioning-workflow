@@ -1,14 +1,19 @@
 region = "us-east-1"
 
-vpc_name = "qa-vpc"
-vpc_cidr = "10.20.0.0/23"
+vpc_name = "dev-vpc"
+vpc_cidr = "10.10.0.0/23"
 
-public_subnet_count  = 2
-private_subnet_count = 2
+public_subnets = {
+  public-1 = "10.10.0.0/25"
+}
 
-subnet_newbits = 2   # /23 → /25
+private_subnets = {
+  private-1 = "10.10.0.128/25"
+}
 
 tags = {
-  Environment = "qa"
-  ManagedBy  = "Terraform"
+  Environment = "dev"
+  ManagedBy   = "Terraform"
 }
+
+Environment = "qa"
