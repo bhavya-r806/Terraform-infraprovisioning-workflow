@@ -14,16 +14,16 @@ variable "vpc_cidr" {
 }
 
 variable "public_subnets" {
-  type        = number
+  type = number
 }
 
 variable "private_subnets" {
-  type        = number
+  type = number
 }
 
 variable "subnet_newbits" {
-  description = " subnet size can be declared"
-  type   = number
+  description = "Subnet size bits"
+  type        = number
 }
 
 variable "tags" {
@@ -32,7 +32,7 @@ variable "tags" {
   default     = {}
 }
 
-variable  "Environment" {
-  description = "adding Environment"
-  type = string
+variable "Environment" {
+  description = "Deployment environment (dev/qa/prod)"
+  type        = string
 }

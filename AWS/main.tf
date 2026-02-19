@@ -1,12 +1,15 @@
 module "vpc" {
   source = "./modules/vpc"
-  subnet_newbits = var.subnet_newbits
-  vpc_name = var.vpc_name
-  vpc_cidr = var.vpc_cidr
-  region  = var.region
+
+  region          = var.region
+  vpc_name        = var.vpc_name
+  vpc_cidr        = var.vpc_cidr
+  subnet_newbits  = var.subnet_newbits
 
   public_subnets  = var.public_subnets
   private_subnets = var.private_subnets
 
-  tags = var.tags
+  Environment = var.Environment
+  tags        = var.tags
 }
+
