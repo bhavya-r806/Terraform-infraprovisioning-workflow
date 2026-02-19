@@ -23,6 +23,11 @@ variable "private_subnets" {
   type        = map(string)
 }
 
+variable "subnet_newbits" {
+  description = " subnet size can be declared"
+  type   = number
+}
+
 variable "tags" {
   description = "Common tags applied to all resources"
   type        = map(string)

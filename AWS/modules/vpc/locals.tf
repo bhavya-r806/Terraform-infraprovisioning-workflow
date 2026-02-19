@@ -1,15 +1,15 @@
 locals {
   public_subnets = {
-    for i in range(var.public_subnet_count) :
+    for i in range(var.public_subnet) :
     "public-${i + 1}" => cidrsubnet(var.vpc_cidr, var.subnet_newbits, i)
   }
 
   private_subnets = {
-    for i in range(var.private_subnet_count) :
+    for i in range(var.private_subnet) :
     "private-${i + 1}" => cidrsubnet(
       var.vpc_cidr,
       var.subnet_newbits,
-      i + var.public_subnet_count
+      i + var.public_subnet
     )
   }
 
