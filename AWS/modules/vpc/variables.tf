@@ -14,13 +14,11 @@ variable "vpc_cidr" {
 }
 
 variable "public_subnets" {
-  description = "Map of public subnet names to CIDR blocks"
-  type        = map(string)
+  type        = number
 }
 
 variable "private_subnets" {
-  description = "Map of private subnet names to CIDR blocks"
-  type        = map(string)
+  type        = number
 }
 
 variable "subnet_newbits" {
