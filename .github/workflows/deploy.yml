@@ -9,8 +9,8 @@ on:
     inputs:
       cloud:
         type: choice
-        options: [aws]
-        default: aws
+        options: [azure]
+        default: azure
       environment:
         type: choice
         options: [dev]
@@ -18,8 +18,8 @@ on:
       action:
         description: "Terraform action"
         type: choice
-        options: [destroy]
-        default: destroy
+        options: [apply]
+        default: apply
 
 permissions:
   id-token: write
@@ -30,6 +30,6 @@ jobs:
     uses: ./.github/workflows/terraform-reusable.yml
     secrets: inherit
     with:
-      cloud: aws
+      cloud: azure
       environment: dev
-      action: ${{ github.event.inputs.action || 'destroy' }}
+      action: ${{ github.event.inputs.action || 'apply' }}
