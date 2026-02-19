@@ -15,6 +15,11 @@ on:
         type: choice
         options: [prod]
         default: prod
+      action:
+        description: "Terraform action"
+        type: choice
+        options: [destroy]
+        default: apply
 
 permissions:
   id-token: write
@@ -25,6 +30,6 @@ jobs:
     uses: ./.github/workflows/terraform-reusable.yml
     secrets: inherit
     with:
-      # On push → fixed values
       cloud: aws
       environment: prod
+      action: ${{ github.event.inputs.action || 'apply' }}
