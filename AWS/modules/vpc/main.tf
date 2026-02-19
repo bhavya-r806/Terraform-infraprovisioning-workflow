@@ -30,9 +30,8 @@ resource "aws_subnet" "subnets" {
     var.tags,
     {
       Name = each.key
-      Tier = contains(keys(local.public_subnets), each.key)
-        ? "public"
-        : "private"
+      Tier = contains(keys(local.public_subnets), each.key) ? "public" : "private"
+
     }
   )
 }
