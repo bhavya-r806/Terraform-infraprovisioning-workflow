@@ -20,6 +20,9 @@ on:
       private_subnet_count:
         required: true
         type: number
+      subnet_newbits:
+        required: true
+        type: number  
 
 permissions:
   id-token: write
@@ -65,7 +68,7 @@ jobs:
         run: |
           echo "TF_VAR_public_subnet_count=${{ inputs.public_subnet_count }}" >> $GITHUB_ENV
           echo "TF_VAR_private_subnet_count=${{ inputs.private_subnet_count }}" >> $GITHUB_ENV
-
+          echo "TF_VAR_subnet_newbits=${{ inputs.subnet_newbits }}" >> $GITHUB_ENV
      
       - name: Terraform Init
         run: terraform init

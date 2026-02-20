@@ -33,5 +33,7 @@ jobs:
       cloud: azure
       environment: qa
       action: ${{ github.event.inputs.action || 'apply' }}
-      public_subnet_count: 2
-      private_subnet_count: 2
+      public_subnet_count: 1
+      private_subnet_count: 1
+      subnet_newbits: 4
+      
