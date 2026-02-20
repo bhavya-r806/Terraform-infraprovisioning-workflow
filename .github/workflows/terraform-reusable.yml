@@ -11,7 +11,15 @@ on:
         type: string
       action:
         required: true
-        type: string   # apply | destroy
+        type: string   
+
+      # 🔥 SUBNET SCALING INPUTS (ONLY COUNTS)
+      public_subnet_count:
+        required: true
+        type: number
+      private_subnet_count:
+        required: true
+        type: number
 
 permissions:
   id-token: write
@@ -29,7 +37,6 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      # ---------- CLOUD AUTH ----------
       - name: Azure Login (OIDC)
         if: inputs.cloud == 'azure'
         uses: azure/login@v2
@@ -53,7 +60,13 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: us-east-1
 
-      # ---------- TERRAFORM ----------
+      # -EXPORT SUBNET COUNTS TO TERRAFORM ----------
+      - name: Export subnet counts
+        run: |
+          echo "TF_VAR_public_subnet_count=${{ inputs.public_subnet_count }}" >> $GITHUB_ENV
+          echo "TF_VAR_private_subnet_count=${{ inputs.private_subnet_count }}" >> $GITHUB_ENV
+
+     
       - name: Terraform Init
         run: terraform init
         working-directory: ${{ inputs.cloud == 'azure' && 'Azure' || 'AWS' }}
