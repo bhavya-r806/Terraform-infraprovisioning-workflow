@@ -9,12 +9,12 @@ on:
     inputs:
       cloud:
         type: choice
-        options: [aws]
-        default: aws
+        options: [azure,]
+        default: azure
       environment:
         type: choice
-        options: [dev]
-        default: dev
+        options: [qa]
+        default: qa
       action:
         description: "Terraform action"
         type: choice
@@ -30,6 +30,6 @@ jobs:
     uses: ./.github/workflows/terraform-reusable.yml
     secrets: inherit
     with:
-      cloud: aws
-      environment: dev
+      cloud: azure
+      environment: qa
       action: ${{ github.event.inputs.action || 'apply' }}
