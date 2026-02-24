@@ -1,0 +1,38 @@
+name: Deploy Network
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+    inputs:
+      cloud:
+        type: choice
+        options: [ aws]
+        default: aws
+      environment:
+        type: choice
+        options: [qa]
+        default: qa
+      action:
+        description: "Terraform action"
+        type: choice
+        options: [apply]
+        default: apply
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/terraform-reusable.yml
+    secrets: inherit
+    with:
+      cloud: azure
+      environment: qa
+      action: ${{ github.event.inputs.action || 'apply' }}
+      public_subnet_count: 1
+      private_subnet_count: 1
+      subnet_newbits: 4
