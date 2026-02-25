@@ -9,7 +9,7 @@ on:
     inputs:
       cloud:
         type: choice
-        options: [ aws]
+        options: [aws]
         default: aws
       environment:
         type: choice
@@ -30,9 +30,8 @@ jobs:
     uses: ./.github/workflows/terraform-reusable.yml
     secrets: inherit
     with:
-      cloud: aws
-      environment: qa
-      with:
+      cloud: ${{ github.event.inputs.cloud || 'aws' }}
+      environment: ${{ github.event.inputs.environment || 'qa' }}
       action: ${{ github.event.inputs.action || 'apply' }}
       public_subnet_count: 1
       private_subnet_count: 1
