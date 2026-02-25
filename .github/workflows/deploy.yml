@@ -30,7 +30,7 @@ jobs:
     uses: ./.github/workflows/terraform-reusable.yml
     secrets: inherit
     with:
-      cloud: azure
+      cloud: aws
       environment: qa
       action: ${{ github.event.inputs.action }}
       public_subnet_count: 1
