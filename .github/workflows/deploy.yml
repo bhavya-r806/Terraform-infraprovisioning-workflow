@@ -32,7 +32,8 @@ jobs:
     with:
       cloud: aws
       environment: qa
-      action: ${{ github.event.inputs.action//apply }}
+      with:
+      action: ${{ github.event.inputs.action || 'apply' }}
       public_subnet_count: 1
       private_subnet_count: 1
       subnet_newbits: 4
