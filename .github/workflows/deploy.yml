@@ -25,10 +25,11 @@ jobs:
   deploy:
     strategy:
       matrix:
-        cloud: ${{ 
-          inputs.cloud == 'both' && fromJson('["aws","azure"]') ||
-          fromJson(format('["%s"]', inputs.cloud))
-        }}
+        cloud: >-
+          ${{ inputs.cloud == 'both'
+              && fromJson('["aws","azure"]')
+              || fromJson(format('["%s"]', inputs.cloud))
+          }}
 
     uses: ./.github/workflows/terraform-reusable.yml
     secrets: inherit
