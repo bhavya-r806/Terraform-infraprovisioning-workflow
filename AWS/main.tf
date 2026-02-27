@@ -6,8 +6,8 @@ module "vpc" {
   vpc_cidr        = var.vpc_cidr
   subnet_newbits  = var.subnet_newbits
 
-  public_subnets  = var.public_subnet_count 
-  private_subnets = var.private_subnet_count
+  public_subnet_count  = var.public_subnet_count 
+  private_subnet_count = var.private_subnet_count
 
   Environment = var.Environment
   tags        = var.tags
