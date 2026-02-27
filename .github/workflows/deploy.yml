@@ -1,5 +1,7 @@
 name: Deploy Network
 
+name: Deploy Network
+
 on:
   workflow_dispatch:
     inputs:
@@ -23,17 +25,21 @@ permissions:
 
 jobs:
   deploy:
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        cloud: >-
-          ${{ inputs.cloud == 'both'
-              && fromJson('["aws","azure"]')
-              || fromJson(format('["%s"]', inputs.cloud))
-          }}
+        cloud: ${{ 
+          inputs.cloud == 'both'
+          && fromJson('["aws","azure"]')
+          || fromJson(format('["%s"]', inputs.cloud))
+        }}
 
-    uses: ./.github/workflows/terraform-reusable.yml
-    secrets: inherit
-    with:
-      cloud: ${{ matrix.cloud }}
-      environment: ${{ inputs.environment }}
-      action: ${{ inputs.action }}
+    steps:
+      - name: Call reusable workflow
+        uses: ./.github/workflows/terraform-reusable.yml
+        with:
+          cloud: ${{ matrix.cloud }}
+          environment: ${{ inputs.environment }}
+          action: ${{ inputs.action }}
+        secrets: inherit
