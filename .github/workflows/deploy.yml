@@ -4,12 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       cloud:
+        description: "Which cloud to deploy"
         type: choice
-        options: [aws , azure]
+        options: [both]
         required: true
       environment:
         type: choice
-        options: [qa, dev, prod]
+        options: [qa]
         required: true
       action:
         type: choice
@@ -22,9 +23,16 @@ permissions:
 
 jobs:
   deploy:
+    strategy:
+      matrix:
+        cloud: ${{ 
+          inputs.cloud == 'both' && fromJson('["aws","azure"]') ||
+          fromJson(format('["%s"]', inputs.cloud))
+        }}
+
     uses: ./.github/workflows/terraform-reusable.yml
     secrets: inherit
     with:
-      cloud: ${{ inputs.cloud }}
+      cloud: ${{ matrix.cloud }}
       environment: ${{ inputs.environment }}
       action: ${{ inputs.action }}
