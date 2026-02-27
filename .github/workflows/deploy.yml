@@ -35,4 +35,4 @@ jobs:
       action: ${{ github.event.inputs.action || 'apply' }}
       public_subnet_count: 1
       private_subnet_count: 1
-      subnet_newbits: 4
+      subnet_newbits: 2
