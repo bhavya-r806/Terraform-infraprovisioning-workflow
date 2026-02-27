@@ -1,25 +1,20 @@
 name: Deploy Network
 
 on:
-  push:
-    branches:
-      - main
-
   workflow_dispatch:
     inputs:
       cloud:
         type: choice
-        options: [aws]
-        default: aws
+        options: [aws , azure]
+        required: true
       environment:
         type: choice
-        options: [qa]
-        default: qa
+        options: [qa, dev, prod]
+        required: true
       action:
-        description: "Terraform action"
         type: choice
         options: [apply]
-        default: apply
+        required: true
 
 permissions:
   id-token: write
@@ -30,7 +25,6 @@ jobs:
     uses: ./.github/workflows/terraform-reusable.yml
     secrets: inherit
     with:
-      cloud: ${{ github.event.inputs.cloud || 'aws' }}
-      environment: ${{ github.event.inputs.environment || 'qa' }}
-      action: ${{ github.event.inputs.action || 'apply' }}
-      
+      cloud: ${{ inputs.cloud }}
+      environment: ${{ inputs.environment }}
+      action: ${{ inputs.action }}
