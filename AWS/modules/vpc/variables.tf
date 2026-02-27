@@ -13,11 +13,11 @@ variable "vpc_cidr" {
   type        = string
 }
 
-variable "public_subnets" {
+variable "public_subnets_count" {
   type = number
 }
 
-variable "private_subnets" {
+variable "private_subnets_count" {
   type = number
 }
 
