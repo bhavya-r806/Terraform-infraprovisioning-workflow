@@ -11,16 +11,7 @@ on:
         type: string
       action:
         required: true
-        type: string   
-      public_subnet_count:
-        required: true
-        type: number
-      private_subnet_count:
-        required: true
-        type: number
-      subnet_newbits:
-        required: true
-        type: number  
+        type: string     
 
 permissions:
   id-token: write
